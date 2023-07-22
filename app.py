@@ -71,13 +71,13 @@ def main():
 
             if query:
                  docs = VectorStore.similarity_search(query=query , k=3)
-                 llm = OpenAI(temperature=0)
+                 llm = OpenAI(model_name='gpt-3.5-turbo')
                  chain = load_qa_chain(llm = llm , chain_type="stuff")
-                 response = chain.run(input_documents=docs , question=query)
+                 with get_openai_callback() as cb:
+                      response = chain.run(input_documents=docs , question=query)
                  st.write(response)
+                 st.write(cb)
 
-
-                 st.write(docs)
 
                  
 
