@@ -31,12 +31,12 @@ load_dotenv()
 
 
 def main():
-    st.write("Hello")
+
     pdf = st.file_uploader("Upload your PDF file", type='pdf')
     
     if pdf is not None:
             readPdf = PdfReader(pdf)
-            st.write(readPdf)
+            # st.write(readPdf)
             # reading data from pdf 
             text = ""
             for page in readPdf.pages:
@@ -60,7 +60,7 @@ def main():
             if os.path.exists(f"{pdf_name}.pkl"):
                  with open(f"{pdf_name}.pkl","rb") as f:
                       VectorStore = pickle.load(f)
-                 st.write("embeddings loaded from the disk")
+                #  st.write("embeddings loaded from the disk")
             # else compute the embeddings and write it to the buffer    
             else:
                  with open(f"{pdf_name}.pkl","wb") as f:
