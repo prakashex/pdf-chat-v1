@@ -1,7 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
-
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from streamlit_extras.add_vertical_space import add_vertical_space
 
 with st.sidebar:
@@ -34,7 +34,15 @@ def main():
             text = ""
             for page in readPdf.pages:
                  text += page.extract_text()
-            st.write(text)
+
+            text_splitter = RecursiveCharacterTextSplitter(
+                 chunk_size=1000,
+                 chunk_overlap=200,
+                 length_function=len
+            )
+
+            text_chunks = text_splitter.split_text(text = text)
+            st.write(text_chunks)
 
 
 
