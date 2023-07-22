@@ -1,8 +1,12 @@
+import os
+import pickle
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from streamlit_extras.add_vertical_space import add_vertical_space
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
 
 with st.sidebar:
     st.title("Pdf Chat 1.0")
@@ -44,6 +48,24 @@ def main():
             text_chunks = text_splitter.split_text(text = text)
             st.write(text_chunks)
 
+            # creating embeddings of the text chunks
+            embeddings = OpenAIEmbeddings()
+            VectorStore = FAISS.from_texts(text_chunks, embedding=embeddings)
+            pdf_name = pdf.name[:-4]
+            # if the file the same name already exits then read it from the 
+            # buffer
+            if os.path.exists(f"{pdf_name}.pkl"):
+                 with open(f"{pdf_name}.pkl","rb") as f:
+                      VectorStore = pickle.load(f)
+                 st.write("embeddings loaded from the disk")
+            # else compute the embeddings and write it to the buffer    
+            else:
+                 with open(f"{pdf_name}.pkl","wb") as f:
+                     pickle.dump(VectorStore , f)
+
+                 
+            
+            
 
 
 
