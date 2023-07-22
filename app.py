@@ -1,5 +1,6 @@
 import streamlit as st
 from dotenv import load_dotenv
+from PyPDF2 import PdfReader
 
 from streamlit_extras.add_vertical_space import add_vertical_space
 
@@ -25,6 +26,17 @@ load_dotenv()
 def main():
     st.write("Hello")
     pdf = st.file_uploader("Upload your PDF file", type='pdf')
+    
+    if pdf is not None:
+            readPdf = PdfReader(pdf)
+            st.write(readPdf)
+            # reading data from pdf 
+            text = ""
+            for page in readPdf.pages:
+                 text += page.extract_text()
+            st.write(text)
+
+
 
 
 if __name__ == '__main__':
